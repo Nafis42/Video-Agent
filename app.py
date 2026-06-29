@@ -36,16 +36,16 @@ from services.background_processor import (
 )
 
 app = FastAPI(
-    title="AI Meeting Assistant",
+    title="AI Video Assistant",
     description="""
-AI-powered meeting assistant that:
+AI-powered Video Assistant that:
 
-- Transcribes videos and meetings
-- Generates summaries
-- Extracts action items
-- Extracts decisions
-- Builds a RAG knowledge base
-- Supports conversational querying
+- Processes uploaded videos and YouTube links
+- Transcribes audio using Whisper
+- Generates AI summaries
+- Extracts action items, key insights and open questions
+- Builds a searchable RAG knowledge base
+- Lets users chat with their videos
 """,
     version="1.0.0",
 )
