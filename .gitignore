@@ -14,6 +14,8 @@ downloads/
 # Chroma local db
 vector_db/
 
+uploads/
+
 # Streamlit cache
 .streamlit/
 
