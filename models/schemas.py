@@ -13,9 +13,9 @@ class ProcessResponse(BaseModel):
     title: str
     transcript: str
     summary: str
-    action_items: str
-    key_decisions: str
-    open_questions: str
+    action_items: list[str]
+    key_decisions: list[str]
+    open_questions: list[str]
 
 
 class ChatResponse(BaseModel):

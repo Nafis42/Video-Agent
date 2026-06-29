@@ -121,13 +121,13 @@ def load_rag_chain(
         [
             (
                 "system",
-                """You are an expert meeting assistant. Answer the user's question
+                """You are an expert video assistant. Answer the user's question
 based ONLY on the meeting transcript context provided below.
 
 If the answer is not found in the context, say:
 "I could not find this information in the meeting transcript."
 
-Always be concise and precise. If quoting someone, mention it clearly.
+Always be a bit short but give complete answers. If quoting someone, mention it clearly.
 
 Context from meeting transcript:
 {context}""",

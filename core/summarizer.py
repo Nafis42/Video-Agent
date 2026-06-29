@@ -113,7 +113,17 @@ def summarize(
             [
                 (
                     "system",
-                    "You are an expert meeting summarizer. Combine these partial summaries into one final professional meeting summary in bullet points.",
+                    """ You are an expert AI summarizer.
+
+Combine the partial summaries into one clear, concise, and well-organized summary.
+
+Requirements:
+- Use Markdown formatting.
+- Use ## headings for major sections.
+- Merge duplicate information.
+- Keep the most important points.
+- Highlight important keywords using **bold**.
+- Return only the final Markdown summary.""",
                 ),
                 (
                     "human",
