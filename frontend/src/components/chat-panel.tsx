@@ -3,18 +3,39 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Send, Sparkles, MessagesSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import {
-  initialChat,
-  suggestedPrompts,
-  mockAssistantReply,
-  type ChatMessage,
-} from "@/lib/mock-data"
+// import {
+//   initialChat,
+//   suggestedPrompts,
+//   mockAssistantReply,
+//   type ChatMessage,
+// } from "@/lib/mock-data"
 
-export function ChatPanel() {
-  const [messages, setMessages] = useState<ChatMessage[]>(initialChat)
+import { chatWithVideo } from "@/services/api"
+import type { ChatMessage } from "@/types/api"
+
+interface ChatPanelProps {
+  meetingId: string
+}
+
+export function ChatPanel({meetingId}:ChatPanelProps) {
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: "welcome",
+      role: "assistant",
+      content:
+        "Hi! Ask me anything about your video.",
+    },
+  ])
   const [input, setInput] = useState("")
   const [typing, setTyping] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
+
+  const suggestedPrompts = [
+    "Summarize the video",
+    "What are the key decisions?",
+    "List all action items",
+    "What questions remain open?",
+  ]
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -34,17 +55,55 @@ export function ChatPanel() {
     setTyping(true)
 
     // Mock assistant response with a small delay to feel natural.
-    window.setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
+    async function send(text: string) {
+      const trimmed = text.trim()
+    
+      if (!trimmed || typing) return
+    
+      const userMessage: ChatMessage = {
+        id: `u-${Date.now()}`,
+        role: "user",
+        content: trimmed,
+      }
+    
+      setMessages((prev) => [...prev, userMessage])
+    
+      setInput("")
+    
+      setTyping(true)
+    
+      try {
+        const response = await chatWithVideo(
+          meetingId,
+          trimmed
+        )
+    
+        const assistantMessage: ChatMessage = {
           id: `a-${Date.now()}`,
           role: "assistant",
-          content: mockAssistantReply(trimmed),
-        },
-      ])
-      setTyping(false)
-    }, 900)
+          content: response.answer,
+        }
+    
+        setMessages((prev) => [
+          ...prev,
+          assistantMessage,
+        ])
+      } catch (error) {
+        console.error(error)
+    
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `e-${Date.now()}`,
+            role: "assistant",
+            content:
+              "Sorry, something went wrong while generating the answer.",
+          },
+        ])
+      } finally {
+        setTyping(false)
+      }
+    }
   }
 
   return (
