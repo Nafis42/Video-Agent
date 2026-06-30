@@ -246,4 +246,3 @@ def transcribe_all(
         )
 
     return full_transcript.strip()
-
